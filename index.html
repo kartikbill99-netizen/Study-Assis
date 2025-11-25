@@ -1,120 +1,80 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>AI Study Assistant</title>
-  <!-- Include Tailwind CSS -->
-  <script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body class="min-h-screen bg-gradient-to-b from-gray-50 to-white">
-  <!-- Header -->
-  <header class="bg-white border-b border-gray-200 sticky top-0 z-50 shadow-sm">
-    <div class="max-w-5xl mx-auto px-6 py-4 flex items-center justify-between">
-      <div class="flex items-center gap-3">
-        <div class="bg-gradient-to-br from-amber-400 to-orange-500 p-2.5 rounded-xl shadow-lg">
-          <!-- Brain icon placeholder -->
-        </div>
-        <div>
-          <h1 class="text-2xl font-bold text-gray-900">AI Study Assistant</h1>
-          <p class="text-sm text-gray-600">Powered by Advanced AI</p>
-        </div>
-      </div>
-      <!-- New Chat button -->
-      <button class="flex items-center gap-2 px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg transition-all border border-gray-300">
-        <!-- X icon placeholder -->
-        New Chat
-      </button>
-    </div>
-  </header>
-
-  <!-- Main Content -->
-  <div class="max-w-5xl mx-auto px-6 py-8">
-    <!-- ... (all previous sections stay the same) ... -->
-
-    <!-- Input Interface -->
-    <div class="bg-white rounded-2xl shadow-lg border border-gray-200 mb-6 overflow-hidden">
-      <!-- Tabs -->
-      <div class="flex border-b border-gray-200 bg-gray-50">
-        <button class="flex-1 flex items-center justify-center gap-2 py-3 px-4 font-medium transition-all bg-white text-amber-600 border-b-2 border-amber-500">Text</button>
-        <button class="flex-1 flex items-center justify-center gap-2 py-3 px-4 font-medium transition-all text-gray-600 hover:text-gray-900 hover:bg-gray-100">Upload</button>
-        <button class="flex-1 flex items-center justify-center gap-2 py-3 px-4 font-medium transition-all text-gray-600 hover:text-gray-900 hover:bg-gray-100">Camera</button>
-        <button class="flex-1 flex items-center justify-center gap-2 py-3 px-4 font-medium transition-all text-gray-600 hover:text-gray-900 hover:bg-gray-100">Voice</button>
-      </div>
-
-      <!-- Tab Content -->
-      <div class="p-6">
-        <div class="flex gap-3">
-          <input id="userInput" type="text" placeholder="Ask me anything..." class="flex-1 px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-amber-500 transition-all" />
-          <button id="sendBtn" class="px-6 py-3 bg-gradient-to-r from-amber-400 to-orange-500 text-white font-semibold rounded-lg hover:shadow-lg transition-all flex items-center gap-2">
-            Send
-          </button>
-        </div>
-      </div>
-    </div>
-
-    <!-- Messages Area -->
-    <div id="chatArea" class="bg-white rounded-2xl shadow-lg border border-gray-200 p-6 max-h-[600px] overflow-y-auto">
-      <!-- Messages will appear here -->
-    </div>
+<!-- Input Interface -->
+<div class="bg-white rounded-2xl shadow-lg border border-gray-200 mb-6 overflow-hidden">
+  <!-- Tabs -->
+  <div class="flex border-b border-gray-200 bg-gray-50">
+    <button class="flex-1 flex items-center justify-center gap-2 py-3 px-4 font-medium transition-all bg-white text-amber-600 border-b-2 border-amber-500">
+      Text
+    </button>
   </div>
 
-  <!-- Footer -->
-  <footer class="bg-gradient-to-r from-amber-50 to-orange-50 border-t border-amber-200 mt-16 py-12">
-    <div class="max-w-5xl mx-auto px-6 text-center">
-      <div class="mb-6">
-        <p class="text-sm text-gray-600 mb-3">Developed with ❤️ by</p>
-        <h2 class="text-6xl font-black bg-gradient-to-r from-amber-500 via-orange-500 to-amber-600 bg-clip-text text-transparent" style="font-family: Georgia, serif; letter-spacing: 2px;">
-          Kartik
-        </h2>
-        <p class="text-sm text-gray-500 mt-2">Full Stack Developer & AI Enthusiast</p>
-      </div>
-      <div class="flex justify-center gap-8 text-sm text-gray-600">
-        <span>© 2024 AI Study Assistant</span>
-        <span>•</span>
-        <span>All Rights Reserved</span>
-      </div>
+  <!-- Tab Content -->
+  <div class="p-6">
+    <div class="flex gap-3">
+      <input id="userInput" type="text" placeholder="Ask me anything..." class="flex-1 px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-amber-500 transition-all" />
+      <button id="sendBtn" class="px-6 py-3 bg-gradient-to-r from-amber-400 to-orange-500 text-white font-semibold rounded-lg hover:shadow-lg transition-all flex items-center gap-2">
+        Send
+      </button>
     </div>
-  </footer>
+  </div>
+</div>
 
-  <!-- JS to connect frontend to /api/gemini -->
-  <script>
-    const input = document.getElementById("userInput");
-    const sendBtn = document.getElementById("sendBtn");
-    const chatArea = document.getElementById("chatArea");
+<!-- Messages Area -->
+<div id="messagesArea" class="bg-white rounded-2xl shadow-lg border border-gray-200 p-6 max-h-[600px] overflow-y-auto">
+  <div class="space-y-4" id="messagesContainer">
+    <!-- Messages will appear here -->
+  </div>
+</div>
 
-    sendBtn.addEventListener("click", async () => {
-      const message = input.value.trim();
-      if (!message) return;
+<script>
+  const input = document.getElementById("userInput");
+  const sendBtn = document.getElementById("sendBtn");
+  const messagesContainer = document.getElementById("messagesContainer");
 
-      // Show user message
-      const userMsg = document.createElement("div");
-      userMsg.className = "flex justify-end";
-      userMsg.innerHTML = `<div class="max-w-[80%] rounded-2xl p-4 bg-gradient-to-r from-amber-500 to-orange-500 text-white">${message}</div>`;
-      chatArea.appendChild(userMsg);
-      chatArea.scrollTop = chatArea.scrollHeight;
+  async function sendMessage() {
+    const message = input.value.trim();
+    if (!message) return;
 
-      input.value = "";
+    // Show user message
+    const userDiv = document.createElement("div");
+    userDiv.className = "flex justify-end";
+    userDiv.innerHTML = `<div class="max-w-[80%] rounded-2xl p-4 bg-gradient-to-r from-amber-500 to-orange-500 text-white">${message}</div>`;
+    messagesContainer.appendChild(userDiv);
 
-      try {
-        const res = await fetch("/api/gemini", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ prompt: message })
-        });
-        const data = await res.json();
+    // Scroll to bottom
+    messagesContainer.scrollTop = messagesContainer.scrollHeight;
 
-        // Show AI response
-        const aiMsg = document.createElement("div");
-        aiMsg.className = "flex justify-start mt-2";
-        aiMsg.innerHTML = `<div class="max-w-[80%] rounded-2xl p-4 bg-gray-100 text-gray-900 border border-gray-200">${data.reply}</div>`;
-        chatArea.appendChild(aiMsg);
-        chatArea.scrollTop = chatArea.scrollHeight;
+    // Clear input and disable send button
+    input.value = "";
+    sendBtn.disabled = true;
+    sendBtn.classList.add("opacity-50", "cursor-not-allowed");
 
-      } catch (err) {
-        console.error(err);
-      }
-    });
-  </script>
-</body>
-</html>
+    try {
+      const response = await fetch("/api/gemini", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ prompt: message })
+      });
+
+      const data = await response.json();
+      const aiDiv = document.createElement("div");
+      aiDiv.className = "flex justify-start";
+      aiDiv.innerHTML = `<div class="max-w-[80%] rounded-2xl p-4 bg-gray-100 text-gray-900 border border-gray-200">${data.reply || "No response."}</div>`;
+      messagesContainer.appendChild(aiDiv);
+
+      // Scroll to bottom
+      messagesContainer.scrollTop = messagesContainer.scrollHeight;
+
+    } catch (err) {
+      console.error(err);
+      alert("Error communicating with AI. Make sure your backend is deployed and API key is correct.");
+    } finally {
+      sendBtn.disabled = false;
+      sendBtn.classList.remove("opacity-50", "cursor-not-allowed");
+    }
+  }
+
+  sendBtn.addEventListener("click", sendMessage);
+  input.addEventListener("keypress", (e) => {
+    if (e.key === "Enter") sendMessage();
+  });
+</script>
