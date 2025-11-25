@@ -124,5 +124,65 @@
       if (e.key === "Enter") sendMessage();
     });
   </script>
+  <script>
+  // Select DOM elements
+  const inputField = document.querySelector('input[placeholder="Ask me anything..."]');
+  const sendButton = document.querySelector('button:has(span:contains("Send"))') || document.querySelector('button');
+  const messagesArea = document.querySelector('.bg-white.rounded-2xl.shadow-lg.border.p-6.max-h-[600px]');
+
+  // Enable input field
+  inputField.disabled = false;
+
+  // Function to append message
+  function appendMessage(content, type = "user") {
+    const wrapper = document.createElement('div');
+    wrapper.classList.add('flex', type === 'user' ? 'justify-end' : 'justify-start');
+    const msg = document.createElement('div');
+    msg.className = type === 'user'
+      ? 'max-w-[80%] rounded-2xl p-4 bg-gradient-to-r from-amber-500 to-orange-500 text-white'
+      : 'max-w-[80%] rounded-2xl p-4 bg-gray-100 text-gray-900 border border-gray-200';
+    
+    // Add title and emoji for AI responses
+    if(type === 'ai') {
+      msg.innerHTML = `<strong>🧠 AI Assistant:</strong> ${content}`;
+    } else {
+      msg.textContent = content;
+    }
+    
+    wrapper.appendChild(msg);
+    messagesArea.appendChild(wrapper);
+    messagesArea.scrollTop = messagesArea.scrollHeight;
+  }
+
+  // Send request function
+  async function sendMessage() {
+    const prompt = inputField.value.trim();
+    if (!prompt) return;
+
+    appendMessage(prompt, "user"); // show user message
+    inputField.value = ""; // clear input
+
+    try {
+      const res = await fetch('/api/gemini', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ prompt })
+      });
+      const data = await res.json();
+      appendMessage(data.reply || "❌ No response", "ai");
+    } catch (err) {
+      console.error(err);
+      appendMessage("⚠️ Error: Failed to fetch response.", "ai");
+    }
+  }
+
+  // Send button click
+  sendButton.addEventListener('click', sendMessage);
+
+  // Send on Enter key
+  inputField.addEventListener('keydown', (e) => {
+    if(e.key === 'Enter') sendMessage();
+  });
+</script>
 </body>
 </html>
