@@ -5,177 +5,94 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>AI Study Assistant</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <style>
-    /* Scrollbar styling */
-    .scrollbar::-webkit-scrollbar {
-      width: 6px;
-    }
-    .scrollbar::-webkit-scrollbar-thumb {
-      background-color: #f59e0b;
-      border-radius: 10px;
-    }
-  </style>
 </head>
 <body class="min-h-screen bg-gradient-to-b from-gray-50 to-white flex flex-col">
 
   <!-- Header -->
   <header class="bg-white border-b border-gray-200 sticky top-0 z-50 shadow-sm">
-    <div class="max-w-5xl mx-auto px-6 py-4 flex items-center justify-between">
-      <div>
-        <h1 class="text-3xl font-bold text-gray-900">AI Study Assistant</h1>
-        <p class="text-sm text-gray-600">“Empowering Minds, One Question at a Time”</p>
-      </div>
+    <div class="max-w-5xl mx-auto px-6 py-4 flex flex-col items-center">
+      <h1 class="text-3xl font-bold text-gray-900">AI Study Assistant</h1>
+      <p class="text-sm text-gray-600 mt-1 italic">"Education is the most powerful weapon you can use to change the world." 📚✨</p>
     </div>
   </header>
 
   <!-- Main Content -->
-  <main class="flex-1 max-w-5xl mx-auto px-6 py-8 w-full flex flex-col">
-
-    <!-- Input Box -->
-    <div class="bg-white rounded-2xl shadow-lg border border-gray-200 mb-6 p-6 flex flex-col">
-      <label class="font-semibold text-gray-700 mb-2">Ask your question:</label>
+  <main class="flex-1 max-w-3xl mx-auto px-6 py-8 w-full">
+    <!-- Input Interface -->
+    <div class="bg-white rounded-2xl shadow-lg border border-gray-200 p-6 mb-6">
       <div class="flex gap-3">
-        <input id="userInput" type="text" placeholder="Type your question here..." class="flex-1 px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-amber-500 transition-all" />
-        <button id="sendBtn" class="px-6 py-3 bg-gradient-to-r from-amber-400 to-orange-500 text-white font-semibold rounded-lg hover:shadow-lg transition-all">Send</button>
+        <input type="text" id="userInput" placeholder="Ask me anything..." 
+               class="flex-1 px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-amber-500 transition-all" />
+        <button id="sendBtn" class="px-6 py-3 bg-gradient-to-r from-amber-400 to-orange-500 text-white font-semibold rounded-lg hover:shadow-lg transition-all flex items-center gap-2">
+          Send
+        </button>
       </div>
     </div>
 
     <!-- Messages Area -->
-    <div id="messages" class="bg-white rounded-2xl shadow-lg border border-gray-200 p-6 max-h-[400px] overflow-y-auto scrollbar flex flex-col gap-4">
+    <div id="messages" class="bg-white rounded-2xl shadow-lg border border-gray-200 p-6 max-h-[500px] overflow-y-auto space-y-4">
       <!-- Messages will appear here -->
     </div>
 
     <!-- Quality Section -->
-    <section class="mt-8 bg-gradient-to-br from-amber-50 to-orange-50 rounded-2xl p-8 border-2 border-amber-200">
-      <h2 class="text-3xl font-bold text-gray-900 mb-4">Why Choose AI Study Assistant?</h2>
-      <ul class="list-disc pl-5 space-y-2 text-gray-700">
-        <li>🧠 Powered by advanced AI that understands text contextually.</li>
-        <li>📚 Step-by-step explanations to enhance learning.</li>
-        <li>⚡ Instant response without wait times.</li>
-        <li>🎯 Covers all subjects—math, science, history, literature, and more.</li>
-        <li>🔒 Privacy first: your questions are safe and secure.</li>
-        <li>💡 Focused on true understanding, not just answers.</li>
+    <section class="mt-8 bg-gradient-to-br from-amber-50 to-orange-50 rounded-2xl p-6 border-2 border-amber-200">
+      <h2 class="text-2xl font-bold text-gray-900 mb-4">Why Choose Our AI Study Assistant?</h2>
+      <ul class="list-disc list-inside text-gray-700">
+        <li>🚀 Real-time AI responses – no waiting.</li>
+        <li>📚 Multi-subject support – math, science, history, literature.</li>
+        <li>🧠 Step-by-step explanations – learn, don’t just copy answers.</li>
+        <li>🔒 Privacy-first – your data stays secure.</li>
+        <li>✨ Hands-free learning – simple and interactive.</li>
       </ul>
     </section>
   </main>
 
-  <!-- Footer -->
-  <footer class="bg-gradient-to-r from-amber-50 to-orange-50 border-t border-amber-200 mt-16 py-12">
-    <div class="max-w-5xl mx-auto px-6 text-center">
-      <p class="text-sm text-gray-600">Developed with ❤️ by Kartik</p>
-      <p class="text-sm text-gray-500 mt-2">Full Stack Developer & AI Enthusiast</p>
-      <div class="flex justify-center gap-8 text-sm text-gray-600 mt-2">
-        <span>© 2025 AI Study Assistant</span>
-        <span>•</span>
-        <span>All Rights Reserved</span>
-      </div>
-    </div>
+  <footer class="bg-gradient-to-r from-amber-50 to-orange-50 border-t border-amber-200 mt-16 py-6 text-center text-gray-600">
+    © 2025 AI Study Assistant • All Rights Reserved
   </footer>
 
-  <!-- JavaScript for frontend API connection -->
   <script>
     const sendBtn = document.getElementById("sendBtn");
     const userInput = document.getElementById("userInput");
-    const messagesDiv = document.getElementById("messages");
+    const messages = document.getElementById("messages");
 
     async function sendMessage() {
-      const prompt = userInput.value.trim();
-      if (!prompt) return;
+      const text = userInput.value.trim();
+      if (!text) return;
 
       // Display user message
-      const userMsg = document.createElement("div");
-      userMsg.className = "self-end max-w-[80%] rounded-2xl p-4 bg-gradient-to-r from-amber-500 to-orange-500 text-white";
-      userMsg.textContent = prompt;
-      messagesDiv.appendChild(userMsg);
-
-      // Clear input
+      const userDiv = document.createElement("div");
+      userDiv.className = "flex justify-end";
+      userDiv.innerHTML = `<div class="max-w-[80%] rounded-2xl p-4 bg-gradient-to-r from-amber-500 to-orange-500 text-white">👤 ${text}</div>`;
+      messages.appendChild(userDiv);
       userInput.value = "";
-      messagesDiv.scrollTop = messagesDiv.scrollHeight;
+      messages.scrollTop = messages.scrollHeight;
 
+      // Call backend
       try {
-        const response = await fetch("/api/gemini", {
+        const res = await fetch("/api/gemini", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ prompt })
+          body: JSON.stringify({ prompt: text })
         });
-        const data = await response.json();
+        const data = await res.json();
 
-        // Display AI message
-        const aiMsg = document.createElement("div");
-        aiMsg.className = "self-start max-w-[80%] rounded-2xl p-4 bg-gray-100 text-gray-900 border border-gray-200";
-        aiMsg.innerHTML = `🤖 <strong>AI says:</strong> ${data.reply}`;
-        messagesDiv.appendChild(aiMsg);
-        messagesDiv.scrollTop = messagesDiv.scrollHeight;
+        // Display AI response
+        const aiDiv = document.createElement("div");
+        aiDiv.className = "flex justify-start";
+        aiDiv.innerHTML = `<div class="max-w-[80%] rounded-2xl p-4 bg-gray-100 text-gray-900 border border-gray-200">🤖 ${data.reply}</div>`;
+        messages.appendChild(aiDiv);
+        messages.scrollTop = messages.scrollHeight;
 
       } catch (err) {
-        console.error(err);
-        const errorMsg = document.createElement("div");
-        errorMsg.className = "self-start max-w-[80%] rounded-2xl p-4 bg-red-100 text-red-700 border border-red-200";
-        errorMsg.textContent = "⚠️ Error: Unable to get response. Please try again.";
-        messagesDiv.appendChild(errorMsg);
+        console.error("Error:", err);
       }
     }
 
-    // Send message on button click
     sendBtn.addEventListener("click", sendMessage);
-
-    // Send message on Enter key
     userInput.addEventListener("keydown", (e) => {
       if (e.key === "Enter") sendMessage();
     });
   </script>
-   <script>
-const input = document.querySelector('input[type="text"]');
-const sendButton = document.querySelector('button');
-const messagesContainer = document.querySelector('.space-y-4');
-
-function addMessage(content, fromAI = false) {
-  const msgDiv = document.createElement('div');
-  msgDiv.className = `flex ${fromAI ? "justify-start" : "justify-end"}`;
-  msgDiv.innerHTML = `
-    <div class="max-w-[80%] rounded-2xl p-4 ${fromAI ? "bg-gray-100 text-gray-900 border border-gray-200" : "bg-gradient-to-r from-amber-500 to-orange-500 text-white"}">
-      ${fromAI ? "🤖 " + content : "💬 " + content}
-    </div>
-  `;
-  messagesContainer.appendChild(msgDiv);
-  messagesContainer.scrollTop = messagesContainer.scrollHeight;
-}
-
-async function sendPrompt() {
-  const prompt = input.value.trim();
-  if (!prompt) return;
-  addMessage(prompt);
-  input.value = "";
-  input.disabled = true;
-  sendButton.disabled = true;
-
-  try {
-    const res = await fetch("/api/gemini", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ prompt }),
-    });
-    const data = await res.json();
-    addMessage(data.reply, true);
-  } catch (err) {
-    addMessage("⚠️ Error: Could not reach server.", true);
-  } finally {
-    input.disabled = false;
-    sendButton.disabled = false;
-    input.focus();
-  }
-}
-
-// Send on button click
-sendButton.addEventListener("click", sendPrompt);
-
-// Send on Enter key
-input.addEventListener("keydown", (e) => {
-  if (e.key === "Enter") sendPrompt();
-});
-
-// Enable input field
-input.disabled = false;
-</script>
 </body>
 </html>
